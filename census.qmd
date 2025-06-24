@@ -1,0 +1,41 @@
+---
+title: "Census Data"
+author: "DK"
+format: html
+execute: 
+  echo: false
+---
+
+```{r}
+#| message: false
+#| warning: false
+
+# Load packages
+library(tidyverse)
+library(scales)
+
+# Read the data
+nyc_data <- read_csv("nyc_tracts.csv", show_col_types = FALSE)
+```
+
+```{r}
+
+# Remove rows with NA income values for plotting
+
+ggplot(filter(nyc_data, !is.na(med_income)), aes(x = race, y = med_income, fill = race)) +
+  geom_boxplot(color = "black", outlier.color = "red") +
+  labs(
+    title = "Income Disparities Across Racial Groups in NYC",
+    subtitle = "Based on Median Income by Race in NYC Census Tracts",
+    x = "Race",
+    y = "Median Income (USD)",
+    caption = "Source: NYC Census Tracts Data"
+  ) +
+  scale_y_continuous(labels = scales::dollar_format()) +
+  theme_minimal() +
+  theme(
+    legend.position = "none",
+    plot.title = element_text(face = "bold")
+  )
+
+```
